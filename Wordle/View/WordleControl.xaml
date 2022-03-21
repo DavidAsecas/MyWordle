@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="Wordle.UI.View.WordleControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Wordle.UI"
+             xmlns:viewmodel="clr-namespace:Wordle.UI.ViewModel"
+             xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+             Dialog:DialogParticipation.Register="{Binding}"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodel:WordTryViewModel}">
+            <ItemsControl ItemsSource="{Binding Path=Letters}" Width="500" IsEnabled="{Binding Path=IsCorrect}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type viewmodel:LetterViewModel}">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <TextBox Text="{Binding Path=TryLetter, UpdateSourceTrigger=PropertyChanged}" 
+                                Width="40" Height="40" FontSize="20"
+                                CharacterCasing="Upper"
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                local:FocusExtension.IsFocused="{Binding Path=IsFocused}"
+                                Background="{Binding Path=BackgroundColor}" MaxLength="1"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </DataTemplate>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Vertical" VerticalAlignment="Center">
+            <ItemsControl ItemsSource="{Binding Path=TryWords}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Button Content="Verificar" Command="{Binding Path=CheckWordCommand}"/>
+            <Button Content="Nueva partida" Command="{Binding Path=NewGameCommand}" CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
